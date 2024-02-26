@@ -130,3 +130,155 @@ In this example, `innerFunction` is executed outside of `myFunction`, but it sti
 When `myFunction` is called, it creates a new lexical environment. When `innerFunction` is returned, it still has access to the lexical environment of `myFunction`. The ability of `innerFunction` to access the lexical environment of `myFunction` is called a closure.
 
 Even if `innerFunction` was to be called in another file, it would still have access to the lexical environment of `myFunction`.
+
+# This keyword
+
+`this` is a keyword that refers to the object that the function is a property of.
+
+At the global scope, `this` refers to the global object, which is `window` in the browser and `global` in Node.js.
+
+If we create a function:
+
+```js
+function myFunction() {
+  console.log(this);
+}
+
+myFunction();
+```
+
+`this` will refer to the global object.
+
+Why? Because the function is not a property of an object.
+
+If we create an object and add a method to it:
+
+```js
+const myObject = {
+  myMethod() {
+    console.log(this);
+  },
+};
+
+myObject.myMethod();
+```
+
+`this` will refer to the object.
+
+Why? Because the method is a property of the object.
+
+## AddEventListener
+
+If we log `this` in an addEventListener:
+
+```js
+const myButton = document.querySelector("button");
+
+function logThis() {
+  console.log(this);
+}
+
+myButton.addEventListener("click", logThis);
+```
+
+`this` will refer to the button.
+
+Why? Because the addEventListener is a property of the button.
+
+## Arrow Functions
+
+It's different for arrow functions though, they don't have their own `this`. They inherit it from the parent scope. Which could be the global object or the object that the method is a property of.
+
+```js
+const myObject = {
+  myMethod: () => {
+    console.log(this);
+  },
+};
+
+myObject.myMethod();
+```
+
+In this example, `this` will refer to the `window` object because the arrow function doesn't have its own `this`.
+
+## Bind
+
+We can use the `bind` method to set the value of `this` for a function.
+
+```js
+function logThis() {
+  console.log(this);
+}
+
+const myObject = {
+  name: "John",
+};
+
+const logThisBound = logThis.bind(myObject);
+
+logThisBound();
+```
+
+In this example, `this` will refer to the `myObject` object.
+
+If you were to pass arguments, you can do it at the time of binding or at the time of calling the function. Note though, if you do it at the time of binding, you can't change the arguments at the time of calling the function.
+
+## Call
+
+Sometimes you don't want to return a new function, you just want to call the function with a specific value of `this`.
+
+```js
+function logThis() {
+  console.log(this);
+}
+
+const myObject = {
+  name: "John",
+};
+
+logThis.call(myObject);
+```
+
+In this example, `this` will refer to the `myObject` object.
+
+If you had further arguments, you could pass them after the object.
+
+## Apply
+
+It works the same as `call`, but you pass the arguments as an array.
+
+```js
+function logThis(x, y) {
+  console.log(this, x, y);
+}
+
+const myObject = {
+  name: "John",
+};
+
+logThis.apply(myObject, [1, 2]);
+```
+
+In this example, `this` will refer to the `myObject` object.
+
+As you can see, in case of further arguments, you pass them as an array.
+
+## Array methods
+
+Some array methods take a second argument, which is the value of `this`.
+
+This won't work with arrow functions though because they don't have their own `this`.
+
+```js
+const myArray = [1, 2, 3];
+
+const myObject = {
+  name: "John",
+};
+
+myArray.forEach(function (item) {
+  console.log(this, item);
+}, myObject);
+```
+
+In this example, `this` will refer to the `myObject` object.
