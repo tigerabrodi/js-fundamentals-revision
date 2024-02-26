@@ -282,3 +282,47 @@ myArray.forEach(function (item) {
 ```
 
 In this example, `this` will refer to the `myObject` object.
+
+# Currying
+
+Currying is the process of converting a function that takes multiple arguments into a sequence of functions that each take a single argument.
+
+```js
+function add(a, b) {
+  return a + b;
+}
+
+function curriedAdd(a) {
+  return function (b) {
+    return a + b;
+  };
+}
+
+const add5 = curriedAdd(5);
+console.log(add5(3)); // 8
+
+// Or you coul do it in one line
+curriedAdd(5)(3); // 8
+```
+
+We can also create a function that takes a function and returns a curried version of it.
+
+```js
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    } else {
+      return function (...args2) {
+        return curried(...args, ...args2);
+      };
+    }
+  };
+}
+
+const add = curry((a, b) => a + b);
+
+console.log(add(5)(3)); // 8
+```
+
+This function works with any function, no matter how many arguments it takes.
