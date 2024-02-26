@@ -326,3 +326,5 @@ console.log(add(5)(3)); // 8
 ```
 
 This function works with any function, no matter how many arguments it takes.
+
+# The Event Loop
