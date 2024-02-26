@@ -79,3 +79,54 @@ The `await` keyword is used to wait for a promise to be resolved. If the promise
 `try/catch` blocks are used to handle errors that may occur in the asynchronous code.
 
 `promiseB` won't be executed until `promiseA` is resolved. If you want to execute them concurrently, you can use `Promise.all()`.
+
+# Closures
+
+To understand closures, we first need to understand Lexical Environment and Lexical Scoping.
+
+## Lexical Environment
+
+The lexical environment is the environment where the code is written.
+
+Let's look at this piece of code:
+
+```js
+function myFunction() {
+  let a = 1;
+
+  function innerFunction() {
+    console.log("Hello", a);
+  }
+
+  innerFunction();
+}
+```
+
+The lexical environment of `innerFunction` is the environment where it was written, which includes the variable `a`. It would include all variables and functions that are in `myFunction` and outside of it.
+
+So, just the outer scopes of the function.
+
+## Lexical Scoping
+
+Lexical scoping means that the scope of a variable is defined by its position in the source code.
+
+```js
+function myFunction() {
+  let a = 1;
+
+  function innerFunction() {
+    console.log("Hello", a);
+  }
+
+  return innerFunction;
+}
+
+const innerFunction = myFunction();
+innerFunction();
+```
+
+In this example, `innerFunction` is executed outside of `myFunction`, but it still has access to the variable `a`. This is because of closures.
+
+When `myFunction` is called, it creates a new lexical environment. When `innerFunction` is returned, it still has access to the lexical environment of `myFunction`. The ability of `innerFunction` to access the lexical environment of `myFunction` is called a closure.
+
+Even if `innerFunction` was to be called in another file, it would still have access to the lexical environment of `myFunction`.
